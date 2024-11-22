@@ -19,6 +19,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -30,7 +31,15 @@ public class D3Test {
 
     @Before
     public void setUp() {
-        driver = new ChromeDriver();
+        // Create ChromeOptions for headless mode
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless"); // Run without a GUI
+        options.addArguments("--disable-gpu"); // Disable GPU acceleration for compatibility
+        options.addArguments("--window-size=1920,1080"); // Set default resolution for headless Chrome
+        options.addArguments("--no-sandbox"); // Required for some CI environments
+        options.addArguments("--disable-dev-shm-usage"); // Optimize shared memory for CI
+
+        driver = new ChromeDriver(options);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10)); // Implicit wait set globally
         js = (JavascriptExecutor) driver;
         vars = new HashMap<>();

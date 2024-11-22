@@ -7,44 +7,40 @@ import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
 import org.junit.After;
 import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.core.IsNot.not;
-import static org.hamcrest.MatcherAssert.assertThat;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.Keys;
-import java.util.*;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.time.Duration;
+import org.openqa.selenium.WebDriver;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ConnectTest {
   private WebDriver driver;
   private Map<String, Object> vars;
   JavascriptExecutor js;
+
   @Before
   public void setUp() {
-    driver = new ChromeDriver();
+    // Create ChromeOptions for headless mode
+    ChromeOptions options = new ChromeOptions();
+    options.addArguments("--headless"); // Run without a GUI
+    options.addArguments("--disable-gpu"); // Disable GPU acceleration for compatibility
+    options.addArguments("--window-size=1920,1080"); // Set default resolution
+    options.addArguments("--no-sandbox"); // Required for some CI environments
+    options.addArguments("--disable-dev-shm-usage"); // Optimize shared memory for CI
+
+    driver = new ChromeDriver(options);
     js = (JavascriptExecutor) driver;
-    vars = new HashMap<String, Object>();
+    vars = new HashMap<>();
   }
+
   @After
   public void tearDown() {
     driver.quit();
   }
+
   @Test
   public void testConnection() {
     // Test that the webserver is ready to service an HTTP request
